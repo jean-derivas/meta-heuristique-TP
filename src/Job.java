@@ -12,8 +12,8 @@ public class Job {
     }
 
 
-    public void addTache(){
-
+    public void addTache(Tache tache){
+        this.lesTaches.add(tache);
     }
 
     @Override

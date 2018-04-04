@@ -1,6 +1,14 @@
 public class MachineCout {
-    int numeroMachine ;
-    int coutMachine ;
+
+    public int numeroMachine ;
+    public int coutMachine ;
+
+    public MachineCout(int numeroMachine, int coutMachine) {
+        this.numeroMachine = numeroMachine;
+        this.coutMachine = coutMachine;
+    }
+
+
 
     @Override
     public String toString() {
