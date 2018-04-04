@@ -9,7 +9,7 @@ public class Parser {
             BufferedReader buff=new BufferedReader(new FileReader("dataset1.txt"));
             String ligne;
             int nbjobs = 0;
-            int nbmachines,
+            int nbmachines;
             if ((ligne=buff.readLine()) !=null){
                 StringTokenizer st = new StringTokenizer(ligne,"\t");
                 nbjobs= Integer.parseInt(st.nextToken());
