@@ -24,15 +24,20 @@ public class Parser {
                     int nbtache = Integer.parseInt(st.nextToken());
                     System.out.println("nbtache: "+nbtache);
                     for (int j=0;j<nbtache;j++){
-                        Tache tache = new Tache(j);
                         System.out.println("blah "+j);
+                        Tache tache = new Tache(j);
                         System.out.println(tache.toString());
-                        int nbmachj=Integer.parseInt(st.nextToken());
-                        for(int k=0;k<nbmachj;k++){
+                        int nbmachopj=Integer.parseInt(st.nextToken());
+                        System.out.println("nb machine op"+j+": "+nbmachopj);
+                        for(int k=0;k<nbmachopj;k++){
                             int mach = Integer.parseInt(st.nextToken());
                             int cout = Integer.parseInt(st.nextToken());
-                            tache.addCouple(new MachineCout(mach, cout));
+                            System.out.println("machine:"+mach+" cout:"+cout);
+                            MachineCout machine = new MachineCout(mach, cout);
+                            System.out.println(machine);
+                            tache.addCouple(machine);
                         }
+                        System.out.println("blah "+j);
                         jobs[i].addTache(tache);
                     }
                 }
