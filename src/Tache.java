@@ -24,7 +24,7 @@ public class Tache {
 
     @Override
     public String toString() {
-        return("Tache numero : "+ numero +"\n Liste machine cout :" + coupleMachineCout.toString());
+        return "Tache numero : "+ this.numero +"\nListe machine cout :" + this.coupleMachineCout;
     }
 
 

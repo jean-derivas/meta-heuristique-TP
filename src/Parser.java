@@ -17,12 +17,16 @@ public class Parser {
             System.out.println(nbjobs+" "+nbmachines);
             Job  jobs[] = new Job[nbjobs];
             for(int i=0;i<nbjobs;i++){
+                System.out.println(ligne);
                 if ((ligne=buff.readLine())!=null){
-                    jobs[i]= new Job();
+                    //jobs[i]= new Job();
                     StringTokenizer st = new StringTokenizer(ligne,"\t");
                     int nbtache = Integer.parseInt(st.nextToken());
+                    System.out.println("nbtache: "+nbtache);
                     for (int j=0;j<nbtache;j++){
                         Tache tache = new Tache(j);
+                        System.out.println("blah "+j);
+                        System.out.println(tache.toString());
                         int nbmachj=Integer.parseInt(st.nextToken());
                         for(int k=0;k<nbmachj;k++){
                             int mach = Integer.parseInt(st.nextToken());
