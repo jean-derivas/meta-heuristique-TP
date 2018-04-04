@@ -3,26 +3,42 @@ import java.util.*;
 
 public class Parser {
 
-
     public static void main(String[] args) {
         try{
             BufferedReader buff=new BufferedReader(new FileReader("dataset1.txt"));
             String ligne;
             int nbjobs = 0;
-            int nbmachines;
+            int nbmachines=0;
             if ((ligne=buff.readLine()) !=null){
                 StringTokenizer st = new StringTokenizer(ligne,"\t");
                 nbjobs= Integer.parseInt(st.nextToken());
                 nbmachines= Integer.parseInt(st.nextToken());
             }
+            System.out.println(nbjobs+" "+nbmachines);
+            Job  jobs[] = new Job[nbjobs];
             for(int i=0;i<nbjobs;i++){
                 if ((ligne=buff.readLine())!=null){
+                    jobs[i]= new Job();
                     StringTokenizer st = new StringTokenizer(ligne,"\t");
-                    System.out.println(ligne);
+                    int nbtache = Integer.parseInt(st.nextToken());
+                    for (int j=0;j<nbtache;j++){
+                        Tache tache = new Tache(j);
+                        int nbmachj=Integer.parseInt(st.nextToken());
+                        for(int k=0;k<nbmachj;k++){
+                            int mach = Integer.parseInt(st.nextToken());
+                            int cout = Integer.parseInt(st.nextToken());
+                            tache.addCouple(new MachineCout(mach, cout));
+                        }
+                        jobs[i].addTache(tache);
+                    }
                 }
             }
-
+            System.out.println(nbjobs);
+            for(int i=0;i<nbjobs;i++) {
+                System.out.println(jobs[i]);
+            }
             buff.close();
+
         }
         catch (Exception e){
 
