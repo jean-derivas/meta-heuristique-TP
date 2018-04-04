@@ -18,6 +18,6 @@ public class Job {
 
     @Override
     public String toString() {
-        return(lesTaches.toString());
+        return("les taches : " + lesTaches);
     }
 }
