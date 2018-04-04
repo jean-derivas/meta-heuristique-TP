@@ -1,14 +1,15 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Job {
-    public List<Tache> lesTaches ;
+    public ArrayList<Tache> lesTaches ;
 
-    public Job(List<Tache> lesTaches) {
+    public Job(ArrayList<Tache> lesTaches) {
         this.lesTaches = lesTaches;
     }
 
     public Job() {
-        this.lesTaches = null;
+        this.lesTaches = new ArrayList<>();
     }
 
 
@@ -18,6 +19,6 @@ public class Job {
 
     @Override
     public String toString() {
-        return("Taches: "+lesTaches);
+        return("Taches du job: "+lesTaches);
     }
 }
