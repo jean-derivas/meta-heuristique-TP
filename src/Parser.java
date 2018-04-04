@@ -1,20 +1,27 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.util.*;
 
 public class Parser {
 
 
     public static void main(String[] args) {
         try{
-            InputStream flux=new FileInputStream("test.txt");
-            InputStreamReader lecture=new InputStreamReader(flux);
-            BufferedReader buff=new BufferedReader(lecture);
+            BufferedReader buff=new BufferedReader(new FileReader("dataset1.txt"));
             String ligne;
-            while ((ligne=buff.readLine())!=null){
-                System.out.println(ligne);
+            int nbjobs = 0;
+            int nbmachines,
+            if ((ligne=buff.readLine()) !=null){
+                StringTokenizer st = new StringTokenizer(ligne,"\t");
+                nbjobs= Integer.parseInt(st.nextToken());
+                nbmachines= Integer.parseInt(st.nextToken());
             }
+            for(int i=0;i<nbjobs;i++){
+                if ((ligne=buff.readLine())!=null){
+                    StringTokenizer st = new StringTokenizer(ligne,"\t");
+                    System.out.println(ligne);
+                }
+            }
+
             buff.close();
         }
         catch (Exception e){
