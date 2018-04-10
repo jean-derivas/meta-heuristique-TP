@@ -20,6 +20,6 @@ public class Job {
 
     @Override
     public String toString() {
-        return("Taches du job: "+lesTaches);
+        return("Taches du job: "+lesTaches+"\n");
     }
 }

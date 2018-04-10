@@ -3,9 +3,10 @@ import java.util.*;
 
 public class Parser {
 
-    public static void main(String[] args) {
+
+    public static ArrayList<Job> toParse(String filename){
         try{
-            BufferedReader buff=new BufferedReader(new FileReader("dataset1.txt"));
+            BufferedReader buff=new BufferedReader(new FileReader(filename));
             String ligne;
             int nbjobs = 0;
             int nbmachines=0;
@@ -14,11 +15,11 @@ public class Parser {
                 nbjobs= Integer.parseInt(st.nextToken());
                 nbmachines= Integer.parseInt(st.nextToken());
             }
-            Job  jobs[] = new Job[nbjobs];
+            ArrayList<Job> jobs = new ArrayList<>();
             for(int i=0;i<nbjobs;i++){
                 System.out.println(ligne);
                 if ((ligne=buff.readLine())!=null){
-                    jobs[i]= new Job();
+                    Job job = new Job() ;
                     StringTokenizer st = new StringTokenizer(ligne,"\t");
                     int nbtache = Integer.parseInt(st.nextToken());
                     for (int j=0;j<nbtache;j++){
@@ -30,22 +31,25 @@ public class Parser {
                             MachineCout machine = new MachineCout(mach, cout);
                             tache.addCouple(machine);
                         }
-                        jobs[i].addTache(tache);
+                        job.addTache(tache);
                     }
+                    jobs.add(job);
                 }
             }
             System.out.println(nbjobs);
-            for(int i=0;i<nbjobs;i++) {
-                System.out.println(jobs[i]);
-            }
+            System.out.println(jobs);
             buff.close();
-
+            return jobs ;
         }
         catch (Exception e){
-
-
+            System.err.println("Erreur dans toParse");
+            return null ;
         }
-
     }
+
+    public static void main(String[] args) {
+        toParse("dataset1.txt");
+    }
+
 
 }
