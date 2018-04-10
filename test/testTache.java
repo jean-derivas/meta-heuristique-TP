@@ -3,11 +3,15 @@ import org.junit.Test;
 
 public class testTache extends TestCase {
 
-/*
+    @Test
     public final void testTache() throws Exception{
-        Tache zetache = Tache(5);
 
-        assertEquals(1,1);
-    }*/
+        Tache zeTache = new Tache(5) ;
+        MachineCout couple = new MachineCout(1,10);
+        zeTache.addCouple(couple);
+
+        assertEquals(5,zeTache.numero);
+     //   assertEquals("(numMachine,coutMachine)=(1,10)",zeTache.coupleMachineCout);
+    }
 
 }
