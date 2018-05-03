@@ -3,7 +3,11 @@ import java.util.*;
 
 public class Parser {
 
-
+    /**
+     * toParse marche bien même pour plusieurs machines affectables à une tache (en tout cas le printf marche)
+     * @param filename
+     * @return
+     */
     public static ArrayList<Job> toParse(String filename){
         try{
             BufferedReader buff=new BufferedReader(new FileReader(filename));
@@ -50,7 +54,7 @@ public class Parser {
     }
 
     public static void main(String[] args) {
-        toParse("dataset2.txt");
+        toParse("dateset2.txt");
     }
 
 
