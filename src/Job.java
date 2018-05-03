@@ -3,6 +3,7 @@ import java.util.List;
 
 public class Job {
 
+    private int numJob ;
     /**
      * Un job contient une liste de taches
      */
@@ -32,8 +33,12 @@ public class Job {
         this.lesTaches.add(tache);
     }
 
+    public void setNumJob(int numJob){ this.numJob=numJob;}
+
+    public int getNumJob(){return this.numJob;}
+
     @Override
     public String toString() {
-        return("Taches du job: "+lesTaches+"\n");
+        return("Taches du job " + numJob + ": "+lesTaches+"\n");
     }
 }

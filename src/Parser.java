@@ -20,6 +20,7 @@ public class Parser {
                 System.out.println(ligne);
                 if ((ligne=buff.readLine())!=null){
                     Job job = new Job() ;
+                    job.setNumJob(i);
                     StringTokenizer st = new StringTokenizer(ligne,"\t");
                     int nbtache = Integer.parseInt(st.nextToken());
                     for (int j=0;j<nbtache;j++){
@@ -42,13 +43,14 @@ public class Parser {
             return jobs ;
         }
         catch (Exception e){
+
             System.err.println("Erreur dans toParse");
             return null ;
         }
     }
 
     public static void main(String[] args) {
-        toParse("dataset1.txt");
+        toParse("dataset2.txt");
     }
 
 
