@@ -28,7 +28,7 @@ public class Parser {
                     StringTokenizer st = new StringTokenizer(ligne,"\t");
                     int nbtache = Integer.parseInt(st.nextToken());
                     for (int j=0;j<nbtache;j++){
-                        Tache tache = new Tache(j);
+                        Tache tache = new Tache(j,i);
                         int nbmachopj=Integer.parseInt(st.nextToken());
                         for(int k=0;k<nbmachopj;k++){
                             int mach = Integer.parseInt(st.nextToken());
