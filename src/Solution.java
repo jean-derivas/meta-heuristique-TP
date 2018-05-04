@@ -21,18 +21,30 @@ public class Solution {
      */
     public static void genererSolution1(InfoParse info){
 
-        ArrayList<Machine> listeMachine = new ArrayList<>();
+        // modélise le temps
         int temps = 0 ;
+
+        // condition de terminaison
+        boolean termine = false ;
+
+
+        // liste des machines à mettre à jour à chaque affectation
+        ArrayList<Machine> listeMachine = new ArrayList<>();
+
+        // crée autant de machines qu'il en existe
         for (int i = 0; i < info.nbMachine ; i++) {
             listeMachine.add(new Machine(i));
         }
-        boolean termine = false ;
+
+
+        
+
+
 
         while(!termine){
             for (Tache tache: listeTache) {
 
             }
         }
-
     }
 }
