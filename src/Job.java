@@ -1,9 +1,12 @@
 import java.util.ArrayList;
-import java.util.List;
 
 public class Job {
-
+    /* numéro du job */
     private int numJob ;
+
+    private int indexTacheAffecte ;
+
+
     /**
      * Un job contient une liste de taches
      */

@@ -7,7 +7,8 @@ public class Tache {
     /* numero du job auquel appartient cette tache*/
     private int numJob ;
 
-    public boolean termine ;
+    public int etat; //0 pas fait, 1 en cours, 2 terminee
+    public int dateFin ;
 
     public ArrayList<MachineCout> coupleMachineCout;
 
@@ -19,7 +20,7 @@ public class Tache {
     public Tache(int numeroTache, int numJob ,ArrayList<MachineCout> coupleMachineCout) {
         this.numeroTache = numeroTache;
         this.numJob=numJob;
-        this.termine = false ;
+        this.etat = 0 ;
         this.coupleMachineCout = coupleMachineCout;
     }
 
@@ -29,7 +30,7 @@ public class Tache {
      */
     public Tache(int numeroTache, int numJob ) {
         this.numeroTache = numeroTache;
-        this.termine = false ;
+        this.etat = 0 ;
         this.numJob=numJob;
         this.coupleMachineCout = new ArrayList<>();
     }
