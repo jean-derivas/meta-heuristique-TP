@@ -34,6 +34,9 @@ public class Tache {
         this.coupleMachineCout = new ArrayList<>();
     }
 
+    public int getNumJob() {
+        return numJob;
+    }
 
     /**
      * Ajoute un couple machine cout à la liste de la tache

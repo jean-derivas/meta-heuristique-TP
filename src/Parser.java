@@ -8,7 +8,7 @@ public class Parser {
      * @param filename
      * @return
      */
-    public static ArrayList<Job> toParse(String filename){
+    public static InfoParse toParse(String filename){
         try{
             BufferedReader buff=new BufferedReader(new FileReader(filename));
             String ligne;
@@ -20,17 +20,17 @@ public class Parser {
                 nbmachines= Integer.parseInt(st.nextToken());
             }
             ArrayList<Job> jobs = new ArrayList<>();
-            for(int i=0;i<nbjobs;i++){
+            for(int i=0;i<nbjobs;i++) {
                 System.out.println(ligne);
-                if ((ligne=buff.readLine())!=null){
-                    Job job = new Job() ;
+                if ((ligne = buff.readLine()) != null) {
+                    Job job = new Job();
                     job.setNumJob(i);
-                    StringTokenizer st = new StringTokenizer(ligne,"\t");
+                    StringTokenizer st = new StringTokenizer(ligne, "\t");
                     int nbtache = Integer.parseInt(st.nextToken());
-                    for (int j=0;j<nbtache;j++){
-                        Tache tache = new Tache(j,i);
-                        int nbmachopj=Integer.parseInt(st.nextToken());
-                        for(int k=0;k<nbmachopj;k++){
+                    for (int j = 0; j < nbtache; j++) {
+                        Tache tache = new Tache(j, i);
+                        int nbmachopj = Integer.parseInt(st.nextToken());
+                        for (int k = 0; k < nbmachopj; k++) {
                             int mach = Integer.parseInt(st.nextToken());
                             int cout = Integer.parseInt(st.nextToken());
                             MachineCout machine = new MachineCout(mach, cout);
@@ -44,7 +44,10 @@ public class Parser {
             System.out.println(nbjobs);
             System.out.println(jobs);
             buff.close();
-            return jobs ;
+
+
+
+            return new InfoParse(jobs, nbmachines);
         }
         catch (Exception e){
 
