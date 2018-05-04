@@ -6,7 +6,6 @@ public class Tache {
 
     /* numero du job auquel appartient cette tache*/
     private int numJob ;
-
     public int etat; //0 pas fait, 1 en cours, 2 terminee
     public int dateFin ;
 
@@ -37,6 +36,10 @@ public class Tache {
 
     public int getNumJob() {
         return numJob;
+    }
+
+    public int getNumeroTache() {
+        return numeroTache;
     }
 
     /**

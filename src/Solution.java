@@ -36,15 +36,53 @@ public class Solution {
             listeMachine.add(new Machine(i));
         }
 
-
-        
-
+        ArrayList<Tache> listeTacheAffecte = new ArrayList<>();
 
 
-        while(!termine){
-            for (Tache tache: listeTache) {
+        ArrayList<Tache> successeur = new ArrayList<>() ;
+        for(Job job : info.jobs){
+            successeur.add(job.lesTaches.get(0));
+        }
 
+
+
+
+        while(!termine) {
+            // si une machine est dispo on essaie de l'affecter
+            if (machinedispo) {
+
+                // pour chaque tache dans successeur
+                for (Tache tache : successeur) {
+
+                    // si pas dans les noeuds affectés
+                    if (tache.etat == 0) {
+                        if(pasmachinedispopourmonsuccesseur){
+
+                        }
+                        int numJob = tache.getNumJob();
+                        int numTache = tache.getNumeroTache();
+                        // on affecte la tache actuelle
+                        tache.etat=1;
+                        // on retire la tache désormais affectée des successeurs
+                        successeur.remove(tache);
+                        // on l'ajoute dans la liste des taches affectées
+                        listeTacheAffecte.add(tache);
+                        // on ajoute le successeur de cette tache à la liste des successeurs
+                        successeur.add(info.jobs.get(numJob).lesTaches.get(numTache+1));
+                    }
+
+                    // si dernier noeud du job
+                    if(info.jobs.get(tache.getNumJob()).getNbTaches()==tache.getNumeroTache()){
+                        if(info.jobs.)
+                    }
+
+
+
+
+                }
+                temps++;
             }
         }
     }
 }
+

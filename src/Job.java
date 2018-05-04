@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Job {
     /* numéro du job */
     private int numJob ;
-
+    private int nbTaches ;
     private int indexTacheAffecte ;
 
 
@@ -18,6 +18,7 @@ public class Job {
      */
     public Job(ArrayList<Tache> lesTaches) {
         this.lesTaches = lesTaches;
+        this.nbTaches = 0 ;
     }
 
     /**
@@ -25,8 +26,13 @@ public class Job {
      */
     public Job() {
         this.lesTaches = new ArrayList<>();
+        this.nbTaches = 0 ;
     }
 
+
+    public int getNbTaches() {
+        return nbTaches;
+    }
 
     /**
      * Ajoute tache
@@ -34,6 +40,7 @@ public class Job {
      */
     public void addTache(Tache tache){
         this.lesTaches.add(tache);
+        nbTaches++;
     }
 
     public void setNumJob(int numJob){ this.numJob=numJob;}
