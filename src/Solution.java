@@ -45,43 +45,59 @@ public class Solution {
         }
 
 
-
-
         while(!termine) {
+
+            // on détermine si une machine est dispo
+            boolean machinedispo=false;
+            int i=0;
+            while(!machinedispo && i<listeMachine.size()){
+                machinedispo = listeMachine.get(i).disponible;
+                i++;
+            }
+
             // si une machine est dispo on essaie de l'affecter
             if (machinedispo) {
-
                 // pour chaque tache dans successeur
                 for (Tache tache : successeur) {
 
-                    // si pas dans les noeuds affectés
-                    if (tache.etat == 0) {
-                        if(pasmachinedispopourmonsuccesseur){
+                    int numJob = tache.getNumJob();
+                    int numTache = tache.getNumeroTache();
 
+                    // si pas dans les noeuds affectés et tache précédente finie
+                    if (tache.etat == 0 && info.jobs.get(numJob).lesTaches.get(numTache-1).etat==2) {
+
+                        // on récupère la première machine dispo pour la tache
+                        int machine = tache.MachineDispo(listeMachine);
+
+                        // on n'affecte que dans le cas où on a bel et bien une machine dispo pour la tache
+                        if(machine!=-1){
+                            Machine m = listeMachine.get(machine);
+                            // on affecte la tache à la machine, et on la rend indisponible
+                            m.disponible=false;
+                            m.numTache=tache.getNumeroTache();
+                            m.numJob=tache.getNumJob();
+                            // on affecte la tache actuelle
+                            tache.etat=1;
+                            // on initialise la date de fin de la tache avec duree tache+temps
+                            tache.dateFin=tache.coupleMachineCout.get(machine).coutMachine+temps;
+                            // on retire la tache désormais affectée des successeurs
+                            successeur.remove(tache);
+                            // on l'ajoute dans la liste des taches affectées
+                            listeTacheAffecte.add(tache);
+                            // on ajoute le successeur de cette tache à la liste des successeurs
+                            successeur.add(info.jobs.get(numJob).lesTaches.get(numTache+1));
                         }
-                        int numJob = tache.getNumJob();
-                        int numTache = tache.getNumeroTache();
-                        // on affecte la tache actuelle
-                        tache.etat=1;
-                        // on retire la tache désormais affectée des successeurs
-                        successeur.remove(tache);
-                        // on l'ajoute dans la liste des taches affectées
-                        listeTacheAffecte.add(tache);
-                        // on ajoute le successeur de cette tache à la liste des successeurs
-                        successeur.add(info.jobs.get(numJob).lesTaches.get(numTache+1));
+
                     }
 
                     // si dernier noeud du job
                     if(info.jobs.get(tache.getNumJob()).getNbTaches()==tache.getNumeroTache()){
-                        if(info.jobs.)
+                    //    if(info.jobs.)
                     }
 
-
-
-
                 }
-                temps++;
             }
+            temps++;
         }
     }
 }

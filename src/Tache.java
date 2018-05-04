@@ -24,6 +24,19 @@ public class Tache {
     }
 
     /**
+     *
+     * @param machines liste de toutes les machines
+     * @return numéro de la première machine disponible qui correspond, -1 si pas trouvé
+     */
+    public int MachineDispo(ArrayList<Machine> machines){
+        for (MachineCout couple: coupleMachineCout) {
+            if(machines.get(couple.numeroMachine).disponible) return couple.numeroMachine;
+        }
+        return -1 ; // on n'en a pas trouvé
+    }
+
+
+    /**
      * Constructeur qui contient qu'un numéro de tache. La liste des Machine cout sera donné plus tard avec addCouple
      * @param numeroTache
      */
