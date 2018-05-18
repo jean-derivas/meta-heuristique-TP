@@ -21,7 +21,7 @@ public class Parser {
             }
             ArrayList<Job> jobs = new ArrayList<>();
             for(int i=0;i<nbjobs;i++) {
-                System.out.println(ligne);
+                //System.out.println(ligne);
                 if ((ligne = buff.readLine()) != null) {
                     Job job = new Job();
                     job.setNumJob(i);
@@ -41,8 +41,9 @@ public class Parser {
                     jobs.add(job);
                 }
             }
-            System.out.println(nbjobs);
-            System.out.println(jobs);
+            // Affichage en cas de débug
+            //System.out.println(nbjobs);
+            //System.out.println(jobs);
             buff.close();
 
 

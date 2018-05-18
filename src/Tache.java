@@ -26,11 +26,13 @@ public class Tache {
     /**
      *
      * @param machines liste de toutes les machines
-     * @return numéro de la première machine disponible qui correspond, -1 si pas trouvé
+     * @return index de la première machine disponible qui correspond, -1 si pas trouvé
      */
     public int MachineDispo(ArrayList<Machine> machines){
+        int index = 0;
         for (MachineCout couple: coupleMachineCout) {
-            if(machines.get(couple.numeroMachine).disponible) return couple.numeroMachine;
+            if(machines.get(couple.numeroMachine).disponible) return index;
+            index++;
         }
         return -1 ; // on n'en a pas trouvé
     }
