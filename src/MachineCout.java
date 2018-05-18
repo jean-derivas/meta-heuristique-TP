@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class MachineCout {
 
     public int numeroMachine ;
@@ -7,7 +9,6 @@ public class MachineCout {
         this.numeroMachine = numeroMachine;
         this.coutMachine = coutMachine;
     }
-
 
 
     @Override

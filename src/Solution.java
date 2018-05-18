@@ -85,9 +85,10 @@ public class Solution {
                             // on l'ajoute dans la liste des taches affectées
                             listeTacheAffecte.add(tache);
                             // on ajoute le successeur de cette tache à la liste des successeurs
-                            successeur.add(info.jobs.get(numJob).lesTaches.get(numTache+1));
+                            // ssi ce n'est pas la derniere tache du job
+                            if(numTache <info.jobs.get(numJob).lesTaches.size()-1)
+                                successeur.add(info.jobs.get(numJob).lesTaches.get(numTache+1));
                         }
-
                     }
 
                     // si dernier noeud du job
@@ -98,6 +99,11 @@ public class Solution {
                 }
             }
             temps++;
+
+            for(Tache tache: listeTacheAffecte){
+                if(tache.dateFin==temps)
+                    tache.etat=2;
+            }
         }
     }
 }
