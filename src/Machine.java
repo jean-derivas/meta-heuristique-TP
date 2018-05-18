@@ -16,4 +16,9 @@ public class Machine{
     public int getNumeroMachine() {
         return numeroMachine;
     }
+
+    @Override
+    public String toString() {
+        return "numeroMachine = " + this.numeroMachine + " ; dispo = " + this.disponible + "\n";
+    }
 }

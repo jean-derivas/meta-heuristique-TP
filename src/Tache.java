@@ -68,7 +68,7 @@ public class Tache {
 
     @Override
     public String toString() {
-        return ("\nTache numeroTache : "+ this.numeroTache +", Liste machine cout :" + this.coupleMachineCout);
+        return ("\nJob : " + this.numJob +  ", numeroTache : "+ this.numeroTache + ", Etat : " + this.etat + ", datefin : " + this.dateFin + ",  Liste machine cout :" + this.coupleMachineCout);
     }
 
 

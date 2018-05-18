@@ -54,6 +54,18 @@ public class Solution {
 
 
         while(!termine) {
+            System.out.println("Temps:"+ temps);
+            System.out.println("Successeurs"+successeur);
+            System.out.println("Affectes"+listeTacheAffecte);
+            // Etat des machines
+            System.out.println(listeMachine);
+            System.out.println("-------------------------");
+
+            try {
+                Thread.sleep(100) ;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             // on détermine si une machine est dispo
             boolean machinedispo=false;
@@ -62,7 +74,6 @@ public class Solution {
                 machinedispo = listeMachine.get(i).disponible;
                 i++;
             }
-            System.out.println("Machine dispo?: "+machinedispo);
             // si une machine est dispo on essaie de l'affecter
             if (machinedispo) {
                 ArrayList<Integer> rmList = new ArrayList<>();
@@ -72,16 +83,15 @@ public class Solution {
                // for (Tache tache : successeur) {
                   while(itr.hasNext()){
                   Tache tache = itr.next();
-                    System.out.println("on est dans la boucle du successeur");
                     int numJob = tache.getNumJob();
                     int numTache = tache.getNumeroTache();
                     // si pas dans les noeuds affectés et tache précédente finie
                     if (tache.getNumeroTache()==0 || (tache.etat == 0 && info.jobs.get(numJob).lesTaches.get(numTache).etat==2)) {
-                        System.out.println("ça marche! je crois...");
                         // on récupère l'index de la première machine dispo pour la tache
+                      //
                         int machine = tache.MachineDispo(listeMachine);
-                        System.out.println("Tache: "+tache);
-                        System.out.println("Num machine: "+machine);
+                      //  System.out.println("Tache: "+tache);
+                       // System.out.println("Num machine: "+machine);
                         // on n'affecte que dans le cas où on a bel et bien une machine dispo pour la tache
                         if(machine!=-1){
                             Machine m = listeMachine.get(tache.coupleMachineCout.get(machine).numeroMachine);
@@ -121,15 +131,17 @@ public class Solution {
                 }
             }
             temps++;
-            System.out.println("Temps:"+ temps);
-            System.out.println("Successeurs"+successeur);
-            System.out.println("Affectes"+listeTacheAffecte);
 
             ArrayList<Integer> rmList = new ArrayList<>();
 
             for(Tache tache: listeTacheAffecte){
                 if(tache.dateFin==temps) {
                     tache.etat = 2;
+                    for (Machine m : listeMachine){
+                        if(m.numTache==tache.getNumeroTache()){
+                            m.disponible=true;
+                        }
+                    }
                     rmList.add(listeTacheAffecte.indexOf(tache));
                 }
             }
