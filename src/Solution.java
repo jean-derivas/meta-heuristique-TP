@@ -66,11 +66,12 @@ public class Solution {
             // si une machine est dispo on essaie de l'affecter
             if (machinedispo) {
                 ArrayList<Integer> rmList = new ArrayList<>();
+                ArrayList<Integer> addList = new ArrayList<>();
                 // pour chaque tache dans successeur
                 Iterator<Tache> itr = successeur.iterator();
-                //for (Tache tache : successeur) {
-                while(itr.hasNext()){
-                    Tache tache = itr.next();
+               // for (Tache tache : successeur) {
+                  while(itr.hasNext()){
+                  Tache tache = itr.next();
                     System.out.println("on est dans la boucle du successeur");
                     int numJob = tache.getNumJob();
                     int numTache = tache.getNumeroTache();
@@ -104,11 +105,17 @@ public class Solution {
                             // on ajoute le successeur de cette tache à la liste des successeurs
                             // ssi ce n'est pas la derniere tache du job
                             if(numTache <info.jobs.get(numJob).lesTaches.size()-1) {
-                                successeur.add(info.jobs.get(numJob).lesTaches.get(numTache + 1));
+                                addList.add(successeur.indexOf(tache));
                             }
                         }
                     }
                 }
+
+                for(int index : addList){
+                    Tache tache = successeur.get(index);
+                    successeur.add(info.jobs.get(tache.getNumJob()).lesTaches.get(tache.getNumeroTache() + 1));
+                }
+
                 for(int index : rmList){
                     successeur.remove(index);
                 }
@@ -117,12 +124,20 @@ public class Solution {
             System.out.println("Temps:"+ temps);
             System.out.println("Successeurs"+successeur);
             System.out.println("Affectes"+listeTacheAffecte);
+
+            ArrayList<Integer> rmList = new ArrayList<>();
+
             for(Tache tache: listeTacheAffecte){
                 if(tache.dateFin==temps) {
                     tache.etat = 2;
-                    listeTacheAffecte.remove(tache);
+                    rmList.add(listeTacheAffecte.indexOf(tache));
                 }
             }
+
+            for(Integer index : rmList){
+                listeTacheAffecte.remove(index);
+            }
+
             if(successeur.isEmpty()&& listeTacheAffecte.isEmpty()){
                 termine = true;
             }
