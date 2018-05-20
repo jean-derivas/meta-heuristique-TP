@@ -31,7 +31,8 @@ public class Tache {
     public int MachineDispo(ArrayList<Machine> machines){
         int index = 0;
         for (MachineCout couple: coupleMachineCout) {
-            if(machines.get(couple.numeroMachine).disponible) return index;
+            //if(couple.numeroMachine==6) System.out.println("Probleme!!!: "+this);
+            if(machines.get(couple.numeroMachine-1).disponible) return index;
             index++;
         }
         return -1 ; // on n'en a pas trouvé
@@ -68,7 +69,7 @@ public class Tache {
 
     @Override
     public String toString() {
-        return ("\nJob : " + this.numJob +  ", numeroTache : "+ this.numeroTache + ", Etat : " + this.etat + ", datefin : " + this.dateFin + ",  Liste machine cout :" + this.coupleMachineCout);
+        return ("Job : " + this.numJob +  ", numeroTache : "+ this.numeroTache + ", Etat : " + this.etat + ", datefin : " + this.dateFin + ",  Liste machine cout :" + this.coupleMachineCout+"\n");
     }
 
 

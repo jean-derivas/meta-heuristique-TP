@@ -49,6 +49,11 @@ public class Job {
 
     @Override
     public String toString() {
-        return("Taches du job " + numJob + ": "+lesTaches+"\n");
+        String resu = "Taches du job " + numJob + ":";
+        for(Tache tache:lesTaches){
+            resu+=tache;
+        }
+        return resu;
+        //return("Taches du job " + numJob + ": "+lesTaches+"\n");
     }
 }

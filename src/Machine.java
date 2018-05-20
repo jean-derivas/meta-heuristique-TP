@@ -19,6 +19,9 @@ public class Machine{
 
     @Override
     public String toString() {
-        return "numeroMachine = " + this.numeroMachine + " ; dispo = " + this.disponible + "\n";
+        return "numeroMachine = " + this.numeroMachine
+                + " ; dispo = " + this.disponible
+                + " ; numTache = "+numTache
+                +" ; numJob = "+numJob+"\n";
     }
 }
