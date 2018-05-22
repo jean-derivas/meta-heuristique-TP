@@ -173,6 +173,16 @@ public class Solution_test {
         return OS+MA+temps;
     }
 
+    public int genererTemps(ArrayList OS, ArrayList MA){
+        int temps = 0 ;
+        /*while(!termine){
+            If(une machine est disponible && qu’elle peut réaliser une tache d’un job)
+            Affecter machine au job
+            temps ++
+        }*/
+        return temps ;
+    }
+
     public static void main(String[] args) {
         InfoParse parse = Parser.toParse("dataset1.txt");
         Solution_test solution = genererSolution1(parse);
