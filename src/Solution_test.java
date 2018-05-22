@@ -54,18 +54,18 @@ public class Solution_test {
 
         while(!termine) {
 
-            System.out.println("Temps:"+ temps);
+            /*System.out.println("Temps:"+ temps);
             System.out.println("Successeurs"+successeur);
             System.out.println("Affectes"+listeTacheAffecte);
             // Etat des machines
             System.out.println(listeMachine);
-            System.out.println("-------------------------");
+            System.out.println("-------------------------");*/
 
-            try {
+            /*try {
                 Thread.sleep(100) ;
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             // on détermine si une machine est dispo
             boolean machinedispo=false;
@@ -91,13 +91,13 @@ public class Solution_test {
                         // on récupère l'index de la première machine dispo pour la tache
                         int machine = tache.MachineDispo(listeMachine);
                         //System.out.println("Tache: "+tache);
-                        System.out.print("Tache: "+tache);
+                        //System.out.print("Tache: "+tache);
                         // on n'affecte que dans le cas où on a bel et bien une machine dispo pour la tache
                         if(machine!=-1){
                             Machine m = listeMachine.get(tache.coupleMachineCout.get(machine).numeroMachine-1);
-                            System.out.println("Num machine: "+m.getNumeroMachine());
+                            //System.out.println("Num machine: "+m.getNumeroMachine());
                             // on affecte la tache à la machine, et on la rend indisponible
-                            System.out.println("Machine "+m.getNumeroMachine()+" affectee!");
+                            //System.out.println("Machine "+m.getNumeroMachine()+" affectee!");
                             m.disponible=false;
                             m.numTache=tache.getNumeroTache();
                             m.numJob=tache.getNumJob();
@@ -145,7 +145,7 @@ public class Solution_test {
                             m.disponible = true;
                             m.numJob=-1;
                             m.numTache=-1;
-                            System.out.println("Machine "+m.getNumeroMachine()+" liberee!");
+                            //System.out.println("Machine "+m.getNumeroMachine()+" liberee!");
                         }
                     }
                     listeTacheAffecte.remove(tache);

@@ -39,6 +39,16 @@ public class Tache {
     }
 
 
+    public int indiceMachine(int num){
+        int index =0;
+        for (MachineCout couple: coupleMachineCout) {
+            //if(couple.numeroMachine==6) System.out.println("Probleme!!!: "+this);
+            if(couple.numeroMachine==num) return index;
+            index++;
+        }
+        return -1;
+    }
+
     /**
      * Constructeur qui contient qu'un numéro de tache. La liste des Machine cout sera donné plus tard avec addCouple
      * @param numeroTache
