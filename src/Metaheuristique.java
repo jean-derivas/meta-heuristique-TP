@@ -78,27 +78,71 @@ public class Metaheuristique {
     }
 
 
-
+    // fonction qui decoupe Liste, détermine meilleure liste en modifiant une sous liste, puis modifie sous liste suivante
+    // avec nouvelle liste
+    public static Solution heuristique(InfoParse parse){
+        int i, j, size, meilleur;
+        meilleur=0;
+        // on génère la solution initiale, puis on la découpe en sous listes
+        Solution solution = Solution.genererSolution1(parse);
+        ArrayList<ArrayList<Integer>> os = decouperListe(solution.OS);
+        // on effectue un traitement pour chaque sous liste
+        size=os.size();
+        for(i=0;i<size;i++){
+            ArrayList<ArrayList<Integer>> permutations = genererPermutationsListe(os.get(i));
+            // on détermine la meilleure liste avec permutations de la sous liste testée
+            meilleur = Integer.MAX_VALUE;
+            ArrayList<Integer> listeMeilleure = new ArrayList<>();
+            for(ArrayList<Integer> liste: permutations){
+                ArrayList<Integer> temp = new ArrayList<>();
+                for(j=0;j<size;j++) {
+                    if (i == j) {
+                        temp.addAll(liste);
+                    } else {
+                        temp.addAll(os.get(j));
+                    }
+                }
+                int cout=Solution.genererTemps(parse, temp, solution.MA);
+                //System.out.println("Cout: "+cout);
+                if(cout<meilleur){
+                    meilleur=cout;
+                    listeMeilleure = temp;
+                }
+            }
+            os=decouperListe(listeMeilleure);
+        }
+        ArrayList<Integer> temp = new ArrayList<>();
+        for(ArrayList<Integer> liste: os){
+            temp.addAll(liste);
+        }
+        solution.OS = temp;
+        solution.temps=meilleur;
+        return solution;
+    }
 
 
 
     public static void main(String[] args) {
 
-        /*
-        Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
+        /*Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
         System.out.println(OS);
         ArrayList<ArrayList<Integer>> resultat = decouperListe(OS);
-        System.out.println(resultat); */
+        System.out.println(resultat);*/
 
-        ArrayList<Integer> liste = new ArrayList<>() ;
+        /*ArrayList<Integer> liste = new ArrayList<>() ;
         liste.add(1);
         liste.add(2);
         liste.add(3);
         liste.add(4);
         ArrayList<ArrayList<Integer>> resultat  ;
         resultat = genererPermutationsListe(liste);
-        System.out.println(resultat);
+        System.out.println(resultat);*/
+
+        InfoParse parse = Parser.toParse("dataset1.txt");
+        Solution solution = heuristique(parse);
+        System.out.println(solution);
+
     }
 }
