@@ -15,7 +15,8 @@ public class Metaheuristique {
      * @param indice2
      * @return
      */
-    public static ArrayList permuterElementListe(ArrayList liste, int indice1, int indice2){
+    public static ArrayList permuterElementListe(ArrayList<Integer> liste, int indice1, int indice2){
+        ArrayList<Integer> temp = new ArrayList<>(liste) ;
         // cas d'erreurs
         if(indice1<0||indice2<0){
             System.err.println("Indice négatif");
@@ -26,11 +27,23 @@ public class Metaheuristique {
 
         // cas classique
         else {
-            int save = (int) liste.get(indice1);
-            liste.set(indice1, liste.get(indice2));
-            liste.set(indice2, save);
+            int save = (int) temp.get(indice1);
+            temp.set(indice1, temp.get(indice2));
+            temp.set(indice2, save);
         }
-        return liste ;
+        return temp ;
+    }
+
+    public static ArrayList genererPermutationsListe(ArrayList<Integer> liste){
+        ArrayList<ArrayList<Integer>> resultat = new ArrayList<>() ;
+        resultat.add(liste);
+        int listeSize = liste.size() ;
+        for (int i = 0; i<listeSize ; i++) {
+            for(int j=i+1 ; j<listeSize ; j++){
+                resultat.add(permuterElementListe(liste,i,j));
+            }
+        }
+        return resultat ;
     }
 
     // methode qui va découper la liste en petits groupes de nombres qui ne se répètent pas comme ça
@@ -71,12 +84,21 @@ public class Metaheuristique {
 
     public static void main(String[] args) {
 
-
+        /*
         Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
         System.out.println(OS);
         ArrayList<ArrayList<Integer>> resultat = decouperListe(OS);
+        System.out.println(resultat); */
+
+        ArrayList<Integer> liste = new ArrayList<>() ;
+        liste.add(1);
+        liste.add(2);
+        liste.add(3);
+        liste.add(4);
+        ArrayList<ArrayList<Integer>> resultat  ;
+        resultat = genererPermutationsListe(liste);
         System.out.println(resultat);
     }
 }
