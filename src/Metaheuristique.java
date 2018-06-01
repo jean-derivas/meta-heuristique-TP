@@ -60,6 +60,7 @@ public class Metaheuristique {
                 temp.add(val);
             }
         }
+        resultat.add(temp);
         return resultat ; // Retourne arraylist de arraylist d'entier
     }
 
@@ -71,13 +72,11 @@ public class Metaheuristique {
     public static void main(String[] args) {
 
 
-
-        /*
-        Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 0, 3, 4} ;
+        Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
         System.out.println(OS);
-        ArrayList<ArrayList<Integer>> resultat =  decouperListe(OS);
-        System.out.println(resultat);*/
+        ArrayList<ArrayList<Integer>> resultat = decouperListe(OS);
+        System.out.println(resultat);
     }
 }
