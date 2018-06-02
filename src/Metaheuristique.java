@@ -78,9 +78,35 @@ public class Metaheuristique {
         return resultat ; // Retourne arraylist de arraylist d'entier
     }
 
+    /**Méthode qui permet de récupérer la machine attribuée à une tâche d'un job, dans le vecteur MA
+     *
+     * @param MA : le vecteur qui contient la liste des machines attribuées, ordonnées par job puis par tâche
+     * @param parse : contient les valeurs du problème initial (le rendre statique?)
+     * @param numJob : numéro du job
+     * @param numTache : numéro de la tâche du job
+     * @return le numéro de la machine attribuée à la tâche de ce job
+     */
+    public static int getNumMachineMA(ArrayList<Integer> MA, InfoParse parse, int numJob, int numTache){
+        int indiceMachine = 0;
+        int numMachine = -1;
+        for(int i=0;i<numJob;i++){
+            indiceMachine+=parse.jobs.get(i).lesTaches.size();
+        }
+        indiceMachine+=numTache;
+        if(indiceMachine<MA.size()){
+            numMachine = MA.get(indiceMachine);
+        }
+        return numMachine;
+    }
 
+    public static ArrayList changerMachine(ArrayList<Integer> liste, InfoParse parse){
+        ArrayList<Integer> temp = new ArrayList<>(liste);
+        int indice = (int) Math.random()*(temp.size());
+        int i=0;
+        parse.jobs.get(temp.get(indice)).lesTaches.get(i).coupleMachineCout.get(i);
 
-
+        return temp;
+    }
 
     // fonction qui decoupe Liste, détermine meilleure liste en modifiant une sous liste, puis modifie sous liste suivante
     // avec nouvelle liste
