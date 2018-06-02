@@ -2,6 +2,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Metaheuristique {
 
@@ -78,6 +79,9 @@ public class Metaheuristique {
     }
 
 
+
+
+
     // fonction qui decoupe Liste, détermine meilleure liste en modifiant une sous liste, puis modifie sous liste suivante
     // avec nouvelle liste
     public static Solution heuristique(InfoParse parse){
@@ -122,12 +126,111 @@ public class Metaheuristique {
 
 
 
-    public static void main(String[] args) {
 
-        /*Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
+
+
+
+
+    /**
+     * Genere un nombre aleatoire entre minimum et maximum
+     * @param minimum
+     * @param maximum
+     * @return
+     */
+    public static Integer aleatoire(int minimum, int maximum){
+        return minimum + (int)(Math.random() * ((maximum - minimum) + 1)) ;
+    }
+
+    /**
+     * Permute un element d'une liste à "indiceAPermuter" avec un autre élément au hasard entre indiceMin et indiceMax
+     * @param liste
+     * @param indiceAPermuter
+     * @param indiceMin
+     * @param indiceMax
+     * @return
+     */
+    public static ArrayList genererPermutationAleatoire(ArrayList<Integer> liste,int indiceAPermuter, int indiceMin, int indiceMax){
+
+        ArrayList<Integer> zeliste = (ArrayList<Integer>) liste.clone();
+        int size = zeliste.size();
+
+        if(indiceMin>=indiceMax){
+            System.err.println("Indice minimum plus grand que l'indice maximum");
+        }
+
+
+        if(indiceMin<0 || indiceMin>size-1|| indiceAPermuter <0 || indiceAPermuter >size-1 || indiceMax<0 || indiceMax>size-1 ){
+            System.err.println("problème d'indice");
+        }
+
+        int aleatoire = aleatoire(indiceMin,indiceMax);
+        zeliste = permuterElementListe(zeliste,indiceAPermuter,aleatoire);
+        return zeliste;
+    }
+
+
+    /**
+     * Retourne un arrayList d'integer contenant l'indice précédent l'indiceAPermuter ayant meme valeur que la valeur
+     * à l'indiceAPermuter et pareil pour l'indice suivant.
+     * Exemple [1,2,4,5,6,4,6,4,1,2]
+     * SI l'indice à permuter est 5 (donc valeur4) l'arrayList retourné sera [2,7]
+     * @param liste
+     * @param indiceAPermuter
+     * @return
+     */
+    public static ArrayList<Integer> trouverElementIdentiqueVoisin(ArrayList<Integer> liste, int indiceAPermuter){
+        ArrayList<Integer> zeliste = (ArrayList<Integer>) liste.clone();
+        int valeurElement = zeliste.get(indiceAPermuter) ;
+        int indice1 = indiceAPermuter, indice2 = indiceAPermuter ;
+        ListIterator<Integer> it1 = zeliste.listIterator(indiceAPermuter+1);
+        ListIterator<Integer> it2 = zeliste.listIterator(indiceAPermuter);
+        boolean termine1=false, termine2=false ;
+
+        while (it1.hasNext() && !termine1) {
+            if(it1.next()==valeurElement){
+                   termine1=true ;
+            }
+            indice1++ ;
+        }
+
+        while (it2.hasPrevious() && !termine2) {
+            if(it2.previous()==valeurElement){
+                termine2=true ;
+            }
+            indice2--;
+        }
+        ArrayList<Integer> resultat = new ArrayList<>();
+        resultat.add(indice2) ;
+        resultat.add(indice1) ;
+
+        return resultat ;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public static void main(String[] args) {
+        Integer array[] = {1,2,4,3,5,6,4,8,9,11,6,4,1,2} ;
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
-        System.out.println(OS);
+        ArrayList<Integer> resultat = trouverElementIdentiqueVoisin(OS,6);
+        System.out.println(resultat);
+
+
+        /*
+        Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
+        List<Integer> list = Arrays.asList(array);
+        ArrayList<Integer> OS = new ArrayList<Integer>(list);
+        System.out.println(OS);*/
+
+        /*
         ArrayList<ArrayList<Integer>> resultat = decouperListe(OS);
         System.out.println(resultat);*/
 
@@ -140,9 +243,11 @@ public class Metaheuristique {
         resultat = genererPermutationsListe(liste);
         System.out.println(resultat);*/
 
+        /*
         InfoParse parse = Parser.toParse("dataset1.txt");
         Solution solution = heuristique(parse);
         System.out.println(solution);
+        */
 
     }
 }
