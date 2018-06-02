@@ -78,33 +78,67 @@ public class Metaheuristique {
         return resultat ; // Retourne arraylist de arraylist d'entier
     }
 
-    /**Méthode qui permet de récupérer la machine attribuée à une tâche d'un job, dans le vecteur MA
+    /**Méthode qui permet de récupérer l'indice de la tâche d'un job, dans le vecteur MA
      *
      * @param MA : le vecteur qui contient la liste des machines attribuées, ordonnées par job puis par tâche
      * @param parse : contient les valeurs du problème initial (le rendre statique?)
      * @param numJob : numéro du job
      * @param numTache : numéro de la tâche du job
-     * @return le numéro de la machine attribuée à la tâche de ce job
+     * @return l'indice de la tâche de ce job
      */
-    public static int getNumMachineMA(ArrayList<Integer> MA, InfoParse parse, int numJob, int numTache){
+    public static int getIndiceMachineMA(ArrayList<Integer> MA, InfoParse parse, int numJob, int numTache){
         int indiceMachine = 0;
-        int numMachine = -1;
         for(int i=0;i<numJob;i++){
             indiceMachine+=parse.jobs.get(i).lesTaches.size();
         }
         indiceMachine+=numTache;
-        if(indiceMachine<MA.size()){
-            numMachine = MA.get(indiceMachine);
-        }
-        return numMachine;
+        return indiceMachine;
     }
 
-    public static ArrayList changerMachine(ArrayList<Integer> liste, InfoParse parse){
-        ArrayList<Integer> temp = new ArrayList<>(liste);
-        int indice = (int) Math.random()*(temp.size());
-        int i=0;
-        parse.jobs.get(temp.get(indice)).lesTaches.get(i).coupleMachineCout.get(i);
+    /** Méthode qui change la machine attribuée à une tâche d'un job dans MA (permutation machine)
+     *
+     * @param MA : vecteur qui contient la liste des machines attribuées
+     * @param parse : contient les valeurs du problème initial
+     * @param numTache : numéro de la tâche sur laquelle la permutation est effectuée
+     * @return liste des MA possibles pour une tache donnée
+     */
+    public static ArrayList permuterMachine(ArrayList<Integer> MA, InfoParse parse, int numTache, int numJob){
+        int numMachine, numTemp, i, nbMachines;
+        // liste à retourner
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
+        // on récupère le numéro de machine pour la tâche, dans MA
+        numMachine = MA.get(getIndiceMachineMA(MA, parse, numJob, numTache));
+        // on détermine le nombre de machines possibles pour la tâche
+        nbMachines = parse.jobs.get(numJob).lesTaches.get(numTache).coupleMachineCout.size();
+        for(i=0; i<nbMachines;i++){
+            // on récupère le numéro de la machine
+            numTemp=parse.jobs.get(numJob).lesTaches.get(numTache).coupleMachineCout.get(i).numeroMachine;
+            // si ce n'est pas le numéro actuel, on permute et on ajoute le ma permuté à temp
+            if(numMachine!=numTemp){
+                ArrayList<Integer> maTemp = new ArrayList<>(MA);
+                maTemp.set(getIndiceMachineMA(MA, parse, numJob, numTache), numTemp);
+                temp.add(maTemp);
+            }
+        }
+        return temp;
+    }
 
+    /** Méthode qui génère toutes les permutations possibles pour les machines d'une sous liste de tâches
+     *
+     * @param os : la sous-liste des jobs pour lesquels on permute
+     * @param ma : la liste des machines attribuées
+     * @param tab : la liste du numéro de tâche pour chaque job
+     * @param parse : contient les valeurs du problème initial
+     * @return la liste de tous les ma possibles
+     */
+    public static ArrayList<ArrayList<Integer>> genererPermutationsMachines(ArrayList<Integer> os, ArrayList<Integer> ma,
+                                                                            ArrayList<Integer> tab, InfoParse parse){
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
+        temp.add(ma);
+        for(int job: os){
+            // on ajoute à la liste toutes les permutations possibles pour le job (ma modifiés)
+            temp. addAll(permuterMachine(ma, parse, tab.get(job),job));
+        }
         return temp;
     }
 
@@ -243,22 +277,22 @@ public class Metaheuristique {
 
 
     public static void main(String[] args) {
-        Integer array[] = {1,2,4,3,5,6,4,8,9,11,6,4,1,2} ;
+        /*Integer array[] = {1,2,4,3,5,6,4,8,9,11,6,4,1,2} ;
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
         ArrayList<Integer> resultat = trouverElementIdentiqueVoisin(OS,6);
-        System.out.println(resultat);
+        System.out.println(resultat);*/
 
 
-        /*
+
         Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
-        System.out.println(OS);*/
+        System.out.println(OS);
 
-        /*
+
         ArrayList<ArrayList<Integer>> resultat = decouperListe(OS);
-        System.out.println(resultat);*/
+        System.out.println(resultat);
 
         /*ArrayList<Integer> liste = new ArrayList<>() ;
         liste.add(1);
