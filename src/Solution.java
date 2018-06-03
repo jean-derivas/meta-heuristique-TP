@@ -1,27 +1,31 @@
-import java.sql.Array;
+
 import java.util.ArrayList;
 import java.util.List;
 
+/** Classe qui contient la représentation de la solution choisie
+ * Elle contient notamment le vecteur OS (ordre des jobs), le vecteur MA (affectation machines), et le coût en temps
+ * Elle contient également les fonctions permettant de générer une solution de départ (heuristique gloutonne),
+ * et une fonction permettant de calculer le temps à partir des vecteurs OS et MA
+ */
 public class Solution {
 
     public ArrayList<Integer> OS ;
     public ArrayList<Integer> MA ;
     public int temps;
 
-    public Solution(ArrayList<Integer> OS, ArrayList<Integer> MA) {
-        this.OS = OS;
-        this.MA = MA;
-    }
-
     public Solution() {
         this.OS = new ArrayList<>();
         this.MA = new ArrayList<>();
     }
 
-    /**
-     * Genere la solution intelligente (void a changer)
+    /** Heuristique gloutonne qui génère la solution de départ pour les métaheuristiques
+     * Elle attribue à chaque tâche la première machine disponible
+     * Elle construit les vecteurs MA et OS au fur et à mesure
+     * Elle utilise un compteur de temps pour déterminer lorsqu'une tâche est terminée
+     * @param info : les données du problème
+     * @return la solution de départ
      */
-    public static Solution genererSolution1(InfoParse info){
+    public static Solution genererSolution(InfoParse info){
         info.reinitialiserParse();
         int i, j, size;
         Solution solution = new Solution();
@@ -53,19 +57,6 @@ public class Solution {
 
         while(!termine) {
 
-            /*System.out.println("Temps:"+ temps);
-            System.out.println("Successeurs"+successeur);
-            System.out.println("Affectes"+listeTacheAffecte);
-            // Etat des machines
-            System.out.println(listeMachine);
-            System.out.println("-------------------------");*/
-
-            /*try {
-                Thread.sleep(100) ;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-
             // on détermine si une machine est dispo
             boolean machinedispo=false;
             i=0;
@@ -82,21 +73,16 @@ public class Solution {
                 // pour chaque tache dans successeur
                 for (j=0;j<size;j++) {
                     Tache tache = successeur.get(i);
-                    //System.out.println("on est dans la boucle du successeur");
                     int numJob = tache.getNumJob();
                     int numTache = tache.getNumeroTache();
                     // si pas dans les noeuds affectés et tache précédente finie
                     if (tache.getNumeroTache()==0 || (tache.etat == 0 && info.jobs.get(numJob).lesTaches.get(numTache-1).etat==2)) {
                         // on récupère l'index de la première machine dispo pour la tache
                         int machine = tache.MachineDispo(listeMachine);
-                        //System.out.println("Tache: "+tache);
-                        //System.out.print("Tache: "+tache);
                         // on n'affecte que dans le cas où on a bel et bien une machine dispo pour la tache
                         if(machine!=-1){
                             Machine m = listeMachine.get(tache.coupleMachineCout.get(machine).numeroMachine-1);
-                            //System.out.println("Num machine: "+m.getNumeroMachine());
                             // on affecte la tache à la machine, et on la rend indisponible
-                            //System.out.println("Machine "+m.getNumeroMachine()+" affectee!");
                             m.disponible=false;
                             m.numTache=tache.getNumeroTache();
                             m.numJob=tache.getNumJob();
@@ -132,19 +118,14 @@ public class Solution {
             i=0;
             size = listeTacheAffecte.size();
             for (j=0;j<size;j++) {
-                //System.out.println("Liste tache affectees :"+listeTacheAffecte);
-                //System.out.println("Size list: "+listeTacheAffecte.size());
                 Tache tache = listeTacheAffecte.get(i);
-                //System.out.println("Tache: "+tache);
                 if(tache.dateFin==temps) {
                     tache.etat = 2;
                     for (Machine m : listeMachine) {
-                        //System.out.println("Machine: "+m);
                         if (m.numTache == tache.getNumeroTache() && m.numJob == tache.getNumJob()) {
                             m.disponible = true;
                             m.numJob=-1;
                             m.numTache=-1;
-                            //System.out.println("Machine "+m.getNumeroMachine()+" liberee!");
                         }
                     }
                     listeTacheAffecte.remove(tache);
@@ -164,8 +145,14 @@ public class Solution {
         return solution;
     }
 
-    /**
-     * Genere la solution intelligente (void a changer)
+    /**Méthode qui génère le temps d'une solution à partir de ses vecteurs OS et MA
+     * Elle utilise des mécanismes très similaires à ceux de l'heuristique gloutonne
+     * Elle attribue à chaque tâche la machine correspondante dans le vecteur MA
+     * Elle utilise un compteur de temps pour déterminer lorsqu'une tâche est terminée, et évaluer le coût en temps
+     * @param info: données du problème
+     * @param OS
+     * @param MA
+     * @return le coût en temps de la solution
      */
     public static int genererTemps(InfoParse info, ArrayList<Integer> OS, ArrayList<Integer> MA){
         info.reinitialiserParse();
@@ -210,19 +197,6 @@ public class Solution {
         while(!termine) {
             bloque = false;
 
-            /*System.out.println("Temps:"+ temps);
-            System.out.println("Affectes"+listeTacheAffecte);
-            // Etat des machines
-            System.out.println(listeMachine);
-            System.out.println("-------------------------");
-
-            try {
-                Thread.sleep(100) ;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
-
-
             while(!bloque && numOS<OS.size()) {
                 // on détermine si une machine est dispo
                 boolean machinedispo = false;
@@ -248,12 +222,10 @@ public class Solution {
                             int indicemachine = tache.indiceMachine(numMachine);
                             tache.dateFin = tache.coupleMachineCout.get(indicemachine).coutMachine + temps;
                             listeTacheAffecte.add(tache);
-                            //System.out.println("Tache affectée: "+tache);
                             //on modifie l'état de la machine en l'affectant à la tâche et en la rendant indisponible
                             listeMachine.get(numMachine-1).disponible = false;
                             listeMachine.get(numMachine-1).numTache = tache.getNumeroTache();
                             listeMachine.get(numMachine-1).numJob = tache.getNumJob();
-                            //System.out.println("Machine affectée: "+listeMachine.get(numMachine-1));
                             // on incrémente l'indice de tache pour le job en cours
                             indicesJob[job.getNumJob()]++;
                             // on incrémente l'indice de OS
@@ -281,19 +253,14 @@ public class Solution {
             i=0;
             size = listeTacheAffecte.size();
             for (j=0;j<size;j++) {
-                //System.out.println("Liste tache affectees :"+listeTacheAffecte);
-                //System.out.println("Size list: "+listeTacheAffecte.size());
                 Tache tache = listeTacheAffecte.get(i);
-                //System.out.println("Tache: "+tache);
                 if(tache.dateFin==temps) {
                     tache.etat = 2;
                     for (Machine m : listeMachine) {
-                        //System.out.println("Machine: "+m);
                         if (m.numTache == tache.getNumeroTache() && m.numJob == tache.getNumJob()) {
                             m.disponible = true;
                             m.numJob=-1;
                             m.numTache=-1;
-                            //System.out.println("Machine "+m.getNumeroMachine()+" liberee!");
                         }
                     }
                     listeTacheAffecte.remove(tache);
@@ -321,7 +288,7 @@ public class Solution {
 
     public static void main(String[] args) {
         InfoParse parse = Parser.toParse("dataset1.txt");
-        Solution solution = Solution.genererSolution1(parse);
+        Solution solution = Solution.genererSolution(parse);
         int temps = genererTemps(parse, solution.OS, solution.MA);
         System.out.println(solution);
         System.out.println(temps);

@@ -1,12 +1,14 @@
 import java.io.*;
 import java.util.*;
 
+/** Classe qui permet de récupérer les données à partir des fichiers de tests
+ * Elle contient une unique méthode toParse qui renvoie les données dans un InfoParse
+ */
 public class Parser {
 
-    /**
-     * toParse marche bien même pour plusieurs machines affectables à une tache (en tout cas le printf marche)
+    /** Méthode qui permet de générer les données à partir d'un fichier passé en paramètre
      * @param filename
-     * @return
+     * @return les données
      */
     public static InfoParse toParse(String filename){
         try{
@@ -21,7 +23,6 @@ public class Parser {
             }
             ArrayList<Job> jobs = new ArrayList<>();
             for(int i=0;i<nbjobs;i++) {
-                //System.out.println(ligne);
                 if ((ligne = buff.readLine()) != null) {
                     Job job = new Job();
                     job.setNumJob(i);
@@ -36,14 +37,11 @@ public class Parser {
                             MachineCout machine = new MachineCout(mach, cout);
                             tache.addCouple(machine);
                         }
-                        job.addTache(tache);
+                        job.lesTaches.add(tache);
                     }
                     jobs.add(job);
                 }
             }
-            // Affichage en cas de débug
-            //System.out.println(nbjobs);
-            //System.out.println(jobs);
             buff.close();
 
 

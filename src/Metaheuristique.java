@@ -1,19 +1,23 @@
-import java.lang.reflect.Array;
+
 import java.util.*;
 
-import static java.lang.Thread.sleep;
-
+/** Classe qui contient les métaheuristiques par voisinage pour résoudre le problème
+ * Elle contient aussi le main avec lequel on effectue les tests de performance
+ */
 public class Metaheuristique {
 
 
-    /**
-     * permuterElementListe va permuter les éléments situés à indice1 et indice 2
+    /*************************************
+     * HEURISTIQUE NUMERO 1: DETERMINISTE
+     *************************************/
+
+    /**Cette méthode va permuter les éléments situés à indice1 et indice 2 (permutation tâches)
      * Elle print des erreurs (indice négatif ou trop grand) mais ne throw pas et ne bloque pas
      * En cas de bug elle renverra la liste en entrée
      * @param liste
      * @param indice1
      * @param indice2
-     * @return
+     * @return la liste avec la permutation effectuée
      */
     public static ArrayList permuterElementListe(ArrayList<Integer> liste, int indice1, int indice2){
         ArrayList<Integer> temp = new ArrayList<>(liste) ;
@@ -34,6 +38,11 @@ public class Metaheuristique {
         return temp ;
     }
 
+    /** Cette méthode génère toutes les permutations possibles à partir d'une liste d'OS
+     * Elle fait pour cela appel à permuterElementListe, qui effectue les permutations unitaires
+     * @param liste est une sous liste d'OS
+     * @return une liste contenant toutes les listes permutées
+     */
     public static ArrayList genererPermutationsListe(ArrayList<Integer> liste){
         ArrayList<ArrayList<Integer>> resultat = new ArrayList<>() ;
         resultat.add(liste);
@@ -46,16 +55,10 @@ public class Metaheuristique {
         return resultat ;
     }
 
-    // methode qui va découper la liste en petits groupes de nombres qui ne se répètent pas comme ça
-    // on peut faire les permutations qu'on veut à l'intérieur
-
-    /**
-     * méthode qui découpe la liste en petits groupes de liste avec des nombres qui ne se répètent pas (pour faciliter permutations=
-     * l'algorithme parcourt la liste (OS derriere la tete), des qu'on trouve un nombre pour la deuxième fois on coupe et on recommence
-     * /!\AU final c'est ptetre pas utile de découper mais peut etre plutot de noter l'indice de fin de chaque sous liste pour faire des
-     * permutations localement directement sur la grosse liste
-     * @param liste
-     * @return
+    /** Méthode qui découpe la liste en sous listes de nombres tous différents
+     * L'algorithme parcourt la liste et dès qu'on trouve un nombre pour la deuxième fois on coupe et on recommence
+     * @param liste est une liste d'OS
+     * @return la liste contenant les sous listes
      */
     public static ArrayList decouperListe(ArrayList liste){
         ArrayList<ArrayList<Integer>> resultat = new ArrayList<>() ;
@@ -77,7 +80,7 @@ public class Metaheuristique {
         return resultat ; // Retourne arraylist de arraylist d'entier
     }
 
-    /**Méthode qui permet de récupérer l'indice de la tâche d'un job, dans le vecteur MA
+    /**Méthode qui permet de récupérer l'indice de la tâche d'un job donné, dans le vecteur MA
      *
      * @param MA : le vecteur qui contient la liste des machines attribuées, ordonnées par job puis par tâche
      * @param parse : contient les valeurs du problème initial (le rendre statique?)
@@ -107,10 +110,8 @@ public class Metaheuristique {
         ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
         // on récupère le numéro de machine pour la tâche, dans MA
         numMachine = MA.get(getIndiceMachineMA(MA, parse, numJob, numTache));
-        //System.out.println("NumMachine: "+numMachine);
         // on détermine le nombre de machines possibles pour la tâche
         nbMachines = parse.jobs.get(numJob).lesTaches.get(numTache).coupleMachineCout.size();
-        //System.out.println("NbMachine: "+nbMachines);
         for(i=0; i<nbMachines;i++){
             // on récupère le numéro de la machine
             numTemp=parse.jobs.get(numJob).lesTaches.get(numTache).coupleMachineCout.get(i).numeroMachine;
@@ -121,7 +122,6 @@ public class Metaheuristique {
                 temp.add(maTemp);
             }
         }
-        //System.out.println(temp);
         return temp;
     }
 
@@ -136,10 +136,6 @@ public class Metaheuristique {
     public static ArrayList<ArrayList<Integer>> genererPermutationsMachines(ArrayList<Integer> os, ArrayList<Integer> ma,
                                                                             Integer[] tab, InfoParse parse){
         ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
-        /*System.out.println("blah");
-        System.out.println("MA: "+ma);
-        System.out.println("tab: "+tab[os.get(0)]);
-        System.out.println("os: "+os);*/
         temp.add(ma);
         for(int job: os){
             // on ajoute à la liste toutes les permutations possibles pour le job (ma modifiés)
@@ -151,49 +147,12 @@ public class Metaheuristique {
         return temp;
     }
 
-    // fonction qui decoupe Liste, détermine meilleure liste en modifiant une sous liste, puis modifie sous liste suivante
-    // avec nouvelle liste
-    public static Solution heuristiqueOS(InfoParse parse){
-        int i, j, size, meilleur;
-        meilleur=0;
-        // on génère la solution initiale, puis on la découpe en sous listes
-        Solution solution = Solution.genererSolution1(parse);
-        ArrayList<ArrayList<Integer>> os = decouperListe(solution.OS);
-        // on effectue un traitement pour chaque sous liste
-        size=os.size();
-        for(i=0;i<size;i++){
-            ArrayList<ArrayList<Integer>> permutations = genererPermutationsListe(os.get(i));
-            // on détermine la meilleure liste avec permutations de la sous liste testée
-            meilleur = Integer.MAX_VALUE;
-            ArrayList<Integer> listeMeilleure = new ArrayList<>();
-            for(ArrayList<Integer> liste: permutations){
-                ArrayList<Integer> temp = new ArrayList<>();
-                for(j=0;j<size;j++) {
-                    if (i == j) {
-                        temp.addAll(liste);
-                    } else {
-                        temp.addAll(os.get(j));
-                    }
-                }
-                int cout=Solution.genererTemps(parse, temp, solution.MA);
-                //System.out.println("Cout: "+cout);
-                if(cout<meilleur){
-                    meilleur=cout;
-                    listeMeilleure = temp;
-                }
-            }
-            os=decouperListe(listeMeilleure);
-        }
-        ArrayList<Integer> temp = new ArrayList<>();
-        for(ArrayList<Integer> liste: os){
-            temp.addAll(liste);
-        }
-        solution.OS = temp;
-        solution.temps=meilleur;
-        return solution;
-    }
-
-
+    /** Métaheuristique qui génère le voisinage en effectuant des permutations unitaires de tâches et de machines
+     * Elle est déterministe, cad qu'elle génère toutes les combinaisons de permutations unitaires possibles, et choisit la meilleure
+     * Elle génère un voisinage en effectuant les permutations sur une sous liste de OS
+     * @param parse : les données du problème
+     * @return la meilleure solution trouvée par la métaheuristique
+     */
     public static Solution heuristiqueMA(InfoParse parse){
         int i, j, size, meilleur;
         meilleur=0;
@@ -204,7 +163,7 @@ public class Metaheuristique {
             tabTaches[i]=0;
         }
         // on génère la solution initiale, puis on la découpe en sous listes
-        Solution solution = Solution.genererSolution1(parse);
+        Solution solution = Solution.genererSolution(parse);
         ArrayList<ArrayList<Integer>> os = decouperListe(solution.OS);
         // on garde en mémoire la liste des machines sur laquelle on évalue
         ArrayList<Integer> ma = new ArrayList<>(solution.MA);
@@ -233,7 +192,6 @@ public class Metaheuristique {
                 // on détermine le meilleur pour chaque permutation de machines
                 for (ArrayList<Integer> listemachine: permutationsMachines){
                     int cout=Solution.genererTemps(parse, temp, listemachine);
-                    //System.out.println("Cout: "+cout);
                     if(cout<meilleur){
                         meilleur=cout;
                         listeMeilleure = temp;
@@ -260,16 +218,16 @@ public class Metaheuristique {
     }
 
 
-    /**********************************
-     * HEURISTIQUE NUMERO 2 JEAN
-     */
+    /**************************************
+     * HEURISTIQUE NUMERO 2: STOCHASTIQUE
+     **************************************/
 
 
     /**
      * Genere un nombre aleatoire entre minimum et maximum
      * @param minimum
      * @param maximum
-     * @return
+     * @return un nombre aléatoire
      */
     public static Integer aleatoire(int minimum, int maximum){
         return minimum + (int)(Math.random() * ((maximum - minimum) + 1)) ;
@@ -281,7 +239,7 @@ public class Metaheuristique {
      * @param indiceAPermuter
      * @param indiceMin
      * @param indiceMax
-     * @return
+     * @return la liste modifiée
      */
     public static ArrayList genererPermutationAleatoire(ArrayList<Integer> liste,int indiceAPermuter, int indiceMin, int indiceMax){
 
@@ -298,7 +256,6 @@ public class Metaheuristique {
         else {
 
             int aleatoire = aleatoire(indiceMin, indiceMax);
-            //System.out.println("On permute avec " + aleatoire);
             zeliste = permuterElementListe(zeliste, indiceAPermuter, aleatoire);
         }
         return zeliste;
@@ -351,13 +308,19 @@ public class Metaheuristique {
         ArrayList<Integer> zeliste = (ArrayList<Integer>) liste.clone();
         int size = zeliste.size() ;
         int aleatoire = aleatoire(0,size-1);
-        //System.out.println("Indice aléatoire "+aleatoire);
         ArrayList<Integer> bornes = trouverElementIdentiqueVoisin(zeliste,aleatoire);
         ArrayList<Integer> resultat = genererPermutationAleatoire(zeliste,aleatoire,bornes.get(0),bornes.get(1));
         return resultat ;
     }
 
 
+    /** Métaheuristique qui génère le voisinage en effectuant des permutations aléatoires sur la liste d'OS
+     *
+     * @param listeOS
+     * @param listeMA
+     * @param parse : données du problème
+     * @return la meilleure liste d'OS rencontrée
+     */
     public static ArrayList<Integer> heuristiqueAleatoireOS(ArrayList<Integer> listeOS, ArrayList<Integer> listeMA, InfoParse parse){
 
         // clonage liste
@@ -401,62 +364,27 @@ public class Metaheuristique {
 
     public static void main(String[] args) {
 
+        long startTime, endTime;
 
-        InfoParse parse = Parser.toParse("dataset/Barnes/mt10c1.fjs");
-        Solution solution = Solution.genererSolution1(parse);
-        heuristiqueAleatoireOS(solution.OS,solution.MA,parse);
-
-
-        /*
-        Integer array[] = {4,1,2,3,4,5,1,4,5,1,3,2,5,1,2} ;
-        List<Integer> list = Arrays.asList(array);
-        ArrayList<Integer> OS = new ArrayList<Integer>(list);
-        System.out.println("Liste avant : " + OS);
-        ArrayList<Integer> resultat = heuristiqueAleatoireUnitaireOS(OS);
-        System.out.println("Liste après : " + resultat);*/
-
-
-
-        /*Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
-        List<Integer> list = Arrays.asList(array);
-        ArrayList<Integer> OS = new ArrayList<Integer>(list);
-        System.out.println(OS);
-
-
-        ArrayList<ArrayList<Integer>> resultat = decouperListe(OS);
-        System.out.println(resultat);
-
-        int a[] = new int[5];
-        for(int i=0;i<5;i++){
-            System.out.println(a[i]);
-        }*/
-
-
-        /*ArrayList<Integer> liste = new ArrayList<>() ;
-        liste.add(1);
-        liste.add(2);
-        liste.add(3);
-        liste.add(4);
-        ArrayList<ArrayList<Integer>> resultat  ;
-        resultat = genererPermutationsListe(liste);
-        System.out.println(resultat);*/
-
-        /*
-        InfoParse parse = Parser.toParse("dateset2.txt");
-        System.out.println(parse.jobs);
-        Solution solutionGenerique = Solution.genererSolution1(parse);
-        System.out.println("Solution générée de manière simple");
+        InfoParse parse = Parser.toParse("dataset/Barnes/seti5cc.fjs");
+        startTime = System.currentTimeMillis();
+        Solution solutionGenerique = Solution.genererSolution(parse);
+        endTime = System.currentTimeMillis();
+        System.out.println("Solution générée de manière simple en un temps de: " + (endTime-startTime));
         System.out.println(solutionGenerique);
-        //System.out.println(parse.jobs);
 
-        Solution solutionTache = heuristiqueOS(parse);
-        System.out.println("Solution améliorée par permutations de taches");
-        System.out.println(solutionTache);
-
+        startTime = System.currentTimeMillis();
         Solution solutionMachine = heuristiqueMA(parse);
-        System.out.println("Solution améliorée par permutations de taches et machines");
-        System.out.println(solutionMachine);*/
+        endTime = System.currentTimeMillis();
+        System.out.println("Solution améliorée par permutations de taches et machines en un temps de: " + (endTime-startTime));
+        System.out.println(solutionMachine);
 
+        Solution solution = Solution.genererSolution(parse);
+        startTime = System.currentTimeMillis();
+        solution.OS = heuristiqueAleatoireOS(solution.OS, solution.MA, parse);
+        endTime = System.currentTimeMillis();
+        System.out.println("Solution améliorée random en un temps de: " + (endTime-startTime));
+        System.out.println(solution);
 
     }
 }
