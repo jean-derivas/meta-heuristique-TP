@@ -288,19 +288,19 @@ public class Metaheuristique {
         ArrayList<Integer> zeliste = (ArrayList<Integer>) liste.clone();
         int size = zeliste.size();
 
-        if(indiceMin>indiceMax){
-            System.err.println("Indice minimum ("+indiceMin+ ") plus grand que l'indice maximum (" + indiceMax +")");
+        if(indiceMin>indiceMax) {
+            System.err.println("Indice minimum (" + indiceMin + ") plus grand que l'indice maximum (" + indiceMax + ")");
 
         }
-
-
-        if(indiceMin<0 || indiceMin>size-1|| indiceAPermuter <0 || indiceAPermuter >size-1 || indiceMax<0 || indiceMax>size-1 ){
+        else if(indiceMin<0 || indiceMin>size-1|| indiceAPermuter <0 || indiceAPermuter >size-1 || indiceMax<0 || indiceMax>size-1 ){
             System.err.println("problème d'indice");
         }
+        else {
 
-        int aleatoire = aleatoire(indiceMin, indiceMax);
-        System.out.println("On permute avec " + aleatoire);
-        zeliste = permuterElementListe(zeliste,indiceAPermuter,aleatoire);
+            int aleatoire = aleatoire(indiceMin, indiceMax);
+            //System.out.println("On permute avec " + aleatoire);
+            zeliste = permuterElementListe(zeliste, indiceAPermuter, aleatoire);
+        }
         return zeliste;
     }
 
@@ -351,9 +351,9 @@ public class Metaheuristique {
         ArrayList<Integer> zeliste = (ArrayList<Integer>) liste.clone();
         int size = zeliste.size() ;
         int aleatoire = aleatoire(0,size-1);
-        System.out.println("Indice aléatoire "+aleatoire);
+        //System.out.println("Indice aléatoire "+aleatoire);
         ArrayList<Integer> bornes = trouverElementIdentiqueVoisin(zeliste,aleatoire);
-        ArrayList<Integer> resultat = genererPermutationAleatoire(zeliste,aleatoire,bornes.get(0)+1,bornes.get(1)-1);
+        ArrayList<Integer> resultat = genererPermutationAleatoire(zeliste,aleatoire,bornes.get(0),bornes.get(1));
         return resultat ;
     }
 
@@ -387,7 +387,8 @@ public class Metaheuristique {
             dateFin = System.currentTimeMillis() ;
         } while (dateFin-dateDebut<tempsAttenteMax) ;
 
-        System.out.println(scoreTemp);
+        System.out.println("Score init : " + scoreInitiale);
+        System.out.println("Score final : " + scoreTemp);
         return zeliste ;
     }
 
@@ -401,7 +402,7 @@ public class Metaheuristique {
     public static void main(String[] args) {
 
 
-        InfoParse parse = Parser.toParse("dataset1.txt");
+        InfoParse parse = Parser.toParse("dataset/Barnes/mt10c1.fjs");
         Solution solution = Solution.genererSolution1(parse);
         heuristiqueAleatoireOS(solution.OS,solution.MA,parse);
 
