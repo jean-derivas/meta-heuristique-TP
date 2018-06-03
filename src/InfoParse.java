@@ -10,4 +10,15 @@ public class InfoParse {
         this.nbMachine=nbMachine;
     }
 
+    /** Méthode pour réinitialiser les données
+     *  Elle remet les dates de fin et l'état de chaque tâche à 0
+     */
+    public void reinitialiserParse(){
+        for(Job job: jobs){
+            for(Tache tache: job.lesTaches){
+                tache.dateFin=0;
+                tache.etat=0;
+            }
+        }
+    }
 }

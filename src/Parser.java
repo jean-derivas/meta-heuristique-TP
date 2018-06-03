@@ -10,7 +10,9 @@ public class Parser {
      */
     public static InfoParse toParse(String filename){
         try{
+            System.out.println("blah");
             BufferedReader buff=new BufferedReader(new FileReader(filename));
+            System.out.println("blah");
             String ligne;
             int nbjobs = 0;
             int nbmachines=0;

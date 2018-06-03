@@ -108,8 +108,10 @@ public class Metaheuristique {
         ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
         // on récupère le numéro de machine pour la tâche, dans MA
         numMachine = MA.get(getIndiceMachineMA(MA, parse, numJob, numTache));
+        //System.out.println("NumMachine: "+numMachine);
         // on détermine le nombre de machines possibles pour la tâche
         nbMachines = parse.jobs.get(numJob).lesTaches.get(numTache).coupleMachineCout.size();
+        //System.out.println("NbMachine: "+nbMachines);
         for(i=0; i<nbMachines;i++){
             // on récupère le numéro de la machine
             numTemp=parse.jobs.get(numJob).lesTaches.get(numTache).coupleMachineCout.get(i).numeroMachine;
@@ -120,6 +122,7 @@ public class Metaheuristique {
                 temp.add(maTemp);
             }
         }
+        //System.out.println(temp);
         return temp;
     }
 
@@ -132,19 +135,26 @@ public class Metaheuristique {
      * @return la liste de tous les ma possibles
      */
     public static ArrayList<ArrayList<Integer>> genererPermutationsMachines(ArrayList<Integer> os, ArrayList<Integer> ma,
-                                                                            ArrayList<Integer> tab, InfoParse parse){
+                                                                            Integer[] tab, InfoParse parse){
         ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
+        /*System.out.println("blah");
+        System.out.println("MA: "+ma);
+        System.out.println("tab: "+tab[os.get(0)]);
+        System.out.println("os: "+os);*/
         temp.add(ma);
         for(int job: os){
             // on ajoute à la liste toutes les permutations possibles pour le job (ma modifiés)
-            temp. addAll(permuterMachine(ma, parse, tab.get(job),job));
+            ArrayList<ArrayList<Integer>> listePermutes = permuterMachine(ma, parse, tab[job],job);
+            if (listePermutes!=null) {
+                temp.addAll(permuterMachine(ma, parse, tab[job],job));
+            }
         }
         return temp;
     }
 
     // fonction qui decoupe Liste, détermine meilleure liste en modifiant une sous liste, puis modifie sous liste suivante
     // avec nouvelle liste
-    public static Solution heuristique(InfoParse parse){
+    public static Solution heuristiqueOS(InfoParse parse){
         int i, j, size, meilleur;
         meilleur=0;
         // on génère la solution initiale, puis on la découpe en sous listes
@@ -185,7 +195,70 @@ public class Metaheuristique {
     }
 
 
-
+    public static Solution heuristiqueMA(InfoParse parse){
+        int i, j, size, meilleur;
+        meilleur=0;
+        // tableau qui conserve le num de la dernière tâche en cours pour chaque job
+        // il est initialisé à 0
+        Integer tabTaches[] = new Integer[parse.jobs.size()];
+        for(i=0;i<parse.jobs.size();i++){
+            tabTaches[i]=0;
+        }
+        // on génère la solution initiale, puis on la découpe en sous listes
+        Solution solution = Solution.genererSolution1(parse);
+        ArrayList<ArrayList<Integer>> os = decouperListe(solution.OS);
+        // on garde en mémoire la liste des machines sur laquelle on évalue
+        ArrayList<Integer> ma = new ArrayList<>(solution.MA);
+        // on effectue un traitement pour chaque sous liste
+        size=os.size();
+        for(i=0;i<size;i++){
+            // on génère toutes les permutations de tâches possibles
+            ArrayList<ArrayList<Integer>> permutationsTaches = genererPermutationsListe(os.get(i));
+            // on génère toutes les permutations de machines possibles
+            ArrayList<ArrayList<Integer>> permutationsMachines = genererPermutationsMachines(os.get(i),ma,tabTaches,parse);
+            // on détermine la meilleure liste avec permutations de la sous liste testée
+            meilleur = Integer.MAX_VALUE;
+            ArrayList<Integer> listeMeilleure = new ArrayList<>();
+            ArrayList<Integer> listeMachinesMeilleure = new ArrayList<>();
+            // on parcourt toutes les listes de permutations de taches
+            for(ArrayList<Integer> liste: permutationsTaches){
+                // temp permet de reconstituer un os avec la sous liste permutée
+                ArrayList<Integer> temp = new ArrayList<>();
+                for(j=0;j<size;j++) {
+                    if (i == j) {
+                        temp.addAll(liste);
+                    } else {
+                        temp.addAll(os.get(j));
+                    }
+                }
+                // on détermine le meilleur pour chaque permutation de machines
+                for (ArrayList<Integer> listemachine: permutationsMachines){
+                    int cout=Solution.genererTemps(parse, temp, listemachine);
+                    //System.out.println("Cout: "+cout);
+                    if(cout<meilleur){
+                        meilleur=cout;
+                        listeMeilleure = temp;
+                        listeMachinesMeilleure = listemachine;
+                    }
+                }
+            }
+            // on continue à évaluer avec les listes modifiées
+            os=decouperListe(listeMeilleure);
+            ma=listeMachinesMeilleure;
+            // on met à jour le tableau des tâches
+            for(int job: os.get(i)){
+                tabTaches[job]++;
+            }
+        }
+        ArrayList<Integer> temp = new ArrayList<>();
+        for(ArrayList<Integer> liste: os){
+            temp.addAll(liste);
+        }
+        solution.OS = temp;
+        solution.temps=meilleur;
+        solution.MA=ma;
+        return solution;
+    }
 
 
 
@@ -285,7 +358,7 @@ public class Metaheuristique {
 
 
 
-        Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
+        /*Integer array[] = {0, 1, 2, 0, 4, 2, 3, 2, 5, 3, 1, 0, 5, 2, 5, 3, 1, 4, 0, 2, 5, 3, 0, 4, 1, 2, 5, 4, 1, 3, 5, 4, 1, 4, 3, 1,  4 ,2, 1};
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
         System.out.println(OS);
@@ -293,6 +366,12 @@ public class Metaheuristique {
 
         ArrayList<ArrayList<Integer>> resultat = decouperListe(OS);
         System.out.println(resultat);
+
+        int a[] = new int[5];
+        for(int i=0;i<5;i++){
+            System.out.println(a[i]);
+        }*/
+
 
         /*ArrayList<Integer> liste = new ArrayList<>() ;
         liste.add(1);
@@ -303,11 +382,22 @@ public class Metaheuristique {
         resultat = genererPermutationsListe(liste);
         System.out.println(resultat);*/
 
-        /*
-        InfoParse parse = Parser.toParse("dataset1.txt");
-        Solution solution = heuristique(parse);
-        System.out.println(solution);
-        */
+
+        InfoParse parse = Parser.toParse("dateset2.txt");
+        System.out.println(parse.jobs);
+        Solution solutionGenerique = Solution.genererSolution1(parse);
+        System.out.println("Solution générée de manière simple");
+        System.out.println(solutionGenerique);
+        //System.out.println(parse.jobs);
+
+        Solution solutionTache = heuristiqueOS(parse);
+        System.out.println("Solution améliorée par permutations de taches");
+        System.out.println(solutionTache);
+
+        Solution solutionMachine = heuristiqueMA(parse);
+        System.out.println("Solution améliorée par permutations de taches et machines");
+        System.out.println(solutionMachine);
+
 
     }
 }

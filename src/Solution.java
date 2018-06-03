@@ -22,6 +22,7 @@ public class Solution {
      * Genere la solution intelligente (void a changer)
      */
     public static Solution genererSolution1(InfoParse info){
+        info.reinitialiserParse();
         int i, j, size;
         Solution solution = new Solution();
         ArrayList<ArrayList<Integer>> temp = new ArrayList<>();
@@ -167,6 +168,7 @@ public class Solution {
      * Genere la solution intelligente (void a changer)
      */
     public static int genererTemps(InfoParse info, ArrayList<Integer> OS, ArrayList<Integer> MA){
+        info.reinitialiserParse();
         // i, j et size sont des compteurs
         // numOS est un indice de parcours de OS
         // numMA est un indice de parcours de MA
