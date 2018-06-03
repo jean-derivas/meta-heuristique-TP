@@ -1,8 +1,7 @@
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
+
+import static java.lang.Thread.sleep;
 
 public class Metaheuristique {
 
@@ -261,7 +260,9 @@ public class Metaheuristique {
     }
 
 
-
+    /**********************************
+     * HEURISTIQUE NUMERO 2 JEAN
+     */
 
 
     /**
@@ -287,8 +288,9 @@ public class Metaheuristique {
         ArrayList<Integer> zeliste = (ArrayList<Integer>) liste.clone();
         int size = zeliste.size();
 
-        if(indiceMin>=indiceMax){
-            System.err.println("Indice minimum plus grand que l'indice maximum");
+        if(indiceMin>indiceMax){
+            System.err.println("Indice minimum ("+indiceMin+ ") plus grand que l'indice maximum (" + indiceMax +")");
+
         }
 
 
@@ -296,7 +298,8 @@ public class Metaheuristique {
             System.err.println("problème d'indice");
         }
 
-        int aleatoire = aleatoire(indiceMin,indiceMax);
+        int aleatoire = aleatoire(indiceMin, indiceMax);
+        System.out.println("On permute avec " + aleatoire);
         zeliste = permuterElementListe(zeliste,indiceAPermuter,aleatoire);
         return zeliste;
     }
@@ -339,8 +342,54 @@ public class Metaheuristique {
         return resultat ;
     }
 
+    /**
+     * renvoie une permutation au hasard dans les contraintes de l'heuristique précédente
+     * @param liste
+     * @return
+     */
+    public static ArrayList<Integer> heuristiqueAleatoireUnitaireOS(ArrayList<Integer> liste){
+        ArrayList<Integer> zeliste = (ArrayList<Integer>) liste.clone();
+        int size = zeliste.size() ;
+        int aleatoire = aleatoire(0,size-1);
+        System.out.println("Indice aléatoire "+aleatoire);
+        ArrayList<Integer> bornes = trouverElementIdentiqueVoisin(zeliste,aleatoire);
+        ArrayList<Integer> resultat = genererPermutationAleatoire(zeliste,aleatoire,bornes.get(0)+1,bornes.get(1)-1);
+        return resultat ;
+    }
 
 
+    public static ArrayList<Integer> heuristiqueAleatoireOS(ArrayList<Integer> listeOS, ArrayList<Integer> listeMA, InfoParse parse){
+
+        // clonage liste
+        ArrayList<Integer> zeliste = (ArrayList<Integer>) listeOS.clone();
+
+        //
+        int scoreInitiale = Solution.genererTemps(parse,zeliste,listeMA);
+        int scoreTemp = scoreInitiale ;
+
+        // partie temps
+        long tempsAttenteMax = 20*1000;
+        long dateDebut = System.currentTimeMillis() ;
+        long dateFin ;
+        do{
+            ArrayList<Integer> templist = heuristiqueAleatoireUnitaireOS(zeliste);
+            int score = Solution.genererTemps(parse,templist,listeMA);
+            if (score <= scoreTemp){
+                zeliste= (ArrayList<Integer>) templist.clone();
+                scoreTemp = score ;
+            }
+            if (score < scoreTemp){
+                zeliste= (ArrayList<Integer>) templist.clone();
+                scoreTemp = score ;
+                dateDebut = System.currentTimeMillis() ;
+            }
+
+            dateFin = System.currentTimeMillis() ;
+        } while (dateFin-dateDebut<tempsAttenteMax) ;
+
+        System.out.println(scoreTemp);
+        return zeliste ;
+    }
 
 
 
@@ -350,11 +399,20 @@ public class Metaheuristique {
 
 
     public static void main(String[] args) {
-        /*Integer array[] = {1,2,4,3,5,6,4,8,9,11,6,4,1,2} ;
+
+
+        InfoParse parse = Parser.toParse("dataset1.txt");
+        Solution solution = Solution.genererSolution1(parse);
+        heuristiqueAleatoireOS(solution.OS,solution.MA,parse);
+
+
+        /*
+        Integer array[] = {4,1,2,3,4,5,1,4,5,1,3,2,5,1,2} ;
         List<Integer> list = Arrays.asList(array);
         ArrayList<Integer> OS = new ArrayList<Integer>(list);
-        ArrayList<Integer> resultat = trouverElementIdentiqueVoisin(OS,6);
-        System.out.println(resultat);*/
+        System.out.println("Liste avant : " + OS);
+        ArrayList<Integer> resultat = heuristiqueAleatoireUnitaireOS(OS);
+        System.out.println("Liste après : " + resultat);*/
 
 
 
@@ -382,7 +440,7 @@ public class Metaheuristique {
         resultat = genererPermutationsListe(liste);
         System.out.println(resultat);*/
 
-
+        /*
         InfoParse parse = Parser.toParse("dateset2.txt");
         System.out.println(parse.jobs);
         Solution solutionGenerique = Solution.genererSolution1(parse);
@@ -396,7 +454,7 @@ public class Metaheuristique {
 
         Solution solutionMachine = heuristiqueMA(parse);
         System.out.println("Solution améliorée par permutations de taches et machines");
-        System.out.println(solutionMachine);
+        System.out.println(solutionMachine);*/
 
 
     }
