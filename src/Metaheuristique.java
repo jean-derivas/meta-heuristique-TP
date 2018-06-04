@@ -331,7 +331,7 @@ public class Metaheuristique {
         int scoreTemp = scoreInitiale ;
 
         // partie temps
-        long tempsAttenteMax = 20*1000;
+        long tempsAttenteMax = 45*1000;
         long dateDebut = System.currentTimeMillis() ;
         long dateFin ;
         do{
@@ -363,7 +363,52 @@ public class Metaheuristique {
 
 
     public static void main(String[] args) {
+        /** Execution de la metaheuristique H2**/
+        System.out.println("Brandimarte");
 
+        System.out.println("Mk01");
+        for (int i = 0; i <5 ; i++) {
+            InfoParse parse = Parser.toParse("dataset/Brandimarte_Data/Mk01.fjs");
+            Solution solutionGenerique = Solution.genererSolution(parse);
+            heuristiqueAleatoireOS(solutionGenerique.OS,solutionGenerique.MA,parse);
+        }
+
+        System.out.println("Mk09");
+        for (int i = 0; i <5 ; i++) {
+            InfoParse parse = Parser.toParse("dataset/Brandimarte_Data/Mk09.fjs");
+            Solution solutionGenerique = Solution.genererSolution(parse);
+            heuristiqueAleatoireOS(solutionGenerique.OS,solutionGenerique.MA,parse);
+        }
+
+        System.out.println("*******************");
+
+
+        System.out.println("Dauzere");
+        System.out.println("01a");
+        for (int i = 0; i <5 ; i++) {
+            InfoParse parse = Parser.toParse("dataset/Dauzere_Data/01a.fjs");
+            Solution solutionGenerique = Solution.genererSolution(parse);
+            heuristiqueAleatoireOS(solutionGenerique.OS,solutionGenerique.MA,parse);
+        }
+
+        System.out.println("08a");
+        for (int i = 0; i <5 ; i++) {
+            InfoParse parse = Parser.toParse("dataset/Dauzere_Data/08a.fjs");
+            Solution solutionGenerique = Solution.genererSolution(parse);
+            heuristiqueAleatoireOS(solutionGenerique.OS,solutionGenerique.MA,parse);
+        }
+
+        System.out.println("14a");
+        for (int i = 0; i <5 ; i++) {
+            InfoParse parse = Parser.toParse("dataset/Dauzere_Data/14a.fjs");
+            Solution solutionGenerique = Solution.genererSolution(parse);
+            heuristiqueAleatoireOS(solutionGenerique.OS,solutionGenerique.MA,parse);
+        }
+
+        System.out.println("*******************");
+
+        /** Execution de la metaheuristique H1 **/
+        /*
         long startTime, endTime;
 
         InfoParse parse = Parser.toParse("dataset/Barnes/seti5cc.fjs");
@@ -385,6 +430,7 @@ public class Metaheuristique {
         endTime = System.currentTimeMillis();
         System.out.println("Solution améliorée random en un temps de: " + (endTime-startTime));
         System.out.println(solution);
+        */
 
     }
 }
